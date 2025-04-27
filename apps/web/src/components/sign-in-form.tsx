@@ -18,30 +18,53 @@ export default function SignInForm({
 
 	const form = useForm({
 		defaultValues: {
-			email: "",
+			identifier: "",
 			password: "",
 		},
 		onSubmit: async ({ value }) => {
-			await authClient.signIn.email(
-				{
-					email: value.email,
-					password: value.password,
-				},
-				{
-					onSuccess: () => {
-						router.push("/dashboard");
-						toast.success("Sign in successful");
+			// ตรวจสอบว่า identifier เป็นอีเมลหรือไม่
+			const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.identifier);
+
+			if (isEmail) {
+				// เข้าสู่ระบบด้วยอีเมล
+				await authClient.signIn.email(
+					{
+						email: value.identifier,
+						password: value.password,
 					},
-					onError: (error) => {
-						toast.error(error.error.message);
+					{
+						onSuccess: () => {
+							router.push("/dashboard");
+							toast.success("เข้าสู่ระบบสำเร็จ");
+						},
+						onError: (error) => {
+							toast.error(error.error.message);
+						},
 					},
-				},
-			);
+				);
+			} else {
+				// เข้าสู่ระบบด้วยชื่อผู้ใช้
+				await authClient.signIn.username(
+					{
+						username: value.identifier,
+						password: value.password,
+					},
+					{
+						onSuccess: () => {
+							router.push("/dashboard");
+							toast.success("เข้าสู่ระบบสำเร็จ");
+						},
+						onError: (error) => {
+							toast.error(error.error.message);
+						},
+					},
+				);
+			}
 		},
 		validators: {
 			onSubmit: z.object({
-				email: z.string().email("Invalid email address"),
-				password: z.string().min(6, "Password must be at least 6 characters"),
+				identifier: z.string().min(3, "กรุณาใส่อีเมลหรือชื่อผู้ใช้ที่ถูกต้อง"),
+				password: z.string().min(6, "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร"),
 			}),
 		},
 	});
@@ -52,7 +75,7 @@ export default function SignInForm({
 
 	return (
 		<div className="mx-auto mt-10 w-full max-w-md p-6">
-			<h1 className="mb-6 text-center font-bold text-3xl">Welcome Back</h1>
+			<h1 className="mb-6 text-center font-bold text-3xl">ยินดีต้อนรับกลับ</h1>
 
 			<form
 				onSubmit={(e) => {
@@ -63,14 +86,14 @@ export default function SignInForm({
 				className="space-y-4"
 			>
 				<div>
-					<form.Field name="email">
+					<form.Field name="identifier">
 						{(field) => (
 							<div className="space-y-2">
-								<Label htmlFor={field.name}>Email</Label>
+								<Label htmlFor={field.name}>อีเมลหรือชื่อผู้ใช้</Label>
 								<Input
 									id={field.name}
 									name={field.name}
-									type="email"
+									placeholder="กรอกอีเมลหรือชื่อผู้ใช้ของคุณ"
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
@@ -89,11 +112,12 @@ export default function SignInForm({
 					<form.Field name="password">
 						{(field) => (
 							<div className="space-y-2">
-								<Label htmlFor={field.name}>Password</Label>
+								<Label htmlFor={field.name}>รหัสผ่าน</Label>
 								<Input
 									id={field.name}
 									name={field.name}
 									type="password"
+									placeholder="กรอกรหัสผ่านของคุณ"
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
@@ -115,7 +139,7 @@ export default function SignInForm({
 							className="w-full"
 							disabled={!state.canSubmit || state.isSubmitting}
 						>
-							{state.isSubmitting ? "Submitting..." : "Sign In"}
+							{state.isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
 						</Button>
 					)}
 				</form.Subscribe>
@@ -127,7 +151,7 @@ export default function SignInForm({
 					onClick={onSwitchToSignUp}
 					className="text-indigo-600 hover:text-indigo-800"
 				>
-					Need an account? Sign Up
+					ยังไม่มีบัญชี? ลงทะเบียน
 				</Button>
 			</div>
 		</div>

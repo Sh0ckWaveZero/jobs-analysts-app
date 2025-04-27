@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "check-types": "tsc --noEmit",
+    "check-types": "ts-patch tsc --noEmit",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "bun run --hot src/index.ts",
     "start": "bun run dist/src/index.js",
@@ -23,10 +23,12 @@
     "@orpc/client": "^1.1.0"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.6",
+    "prisma": "^6.6.0",
+    "ts-patch": "^3.3.0",
     "tsc-alias": "^1.8.11",
     "typescript": "^5.8.2",
-    "@types/bun": "^1.2.6",
-    "prisma": "^6.6.0"
+    "typescript-transform-paths": "^3.5.5"
   },
   "prisma": {
     "schema": "./prisma/schema"
