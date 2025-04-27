@@ -8,30 +8,25 @@
 		"skipLibCheck": true,
 		"baseUrl": "./",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@prisma/*": ["./prisma/*"],
-			"@prisma": ["./prisma/index.ts"]
+			"@/*": [
+				"./src/*"
+			],
 		},
 		"outDir": "./dist",
-		"types": ["bun"],
+		"types": [
+			"bun"
+		],
 		"jsx": "react-jsx",
 		"jsxImportSource": "hono/jsx",
-		"plugins": [
-			{
-				"transform": "typescript-transform-paths"
-			}
-		]
 	},
 	"tsc-alias": {
 		"resolveFullPaths": true
 	},
-	"ts-patch": {
-		"plugins": [
-			{
-				"transform": "typescript-transform-paths"
-			}
-		]
-	},
-	"include": ["src/**/*", "prisma/**/*"],
-	"exclude": ["node_modules"]
+	"include": [
+		"src/**/*",
+		"prisma/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
 }
