@@ -70,6 +70,18 @@ jobs-analysts-app/
 - `bun dev:web`: Start only the web application
 - `bun dev:server`: Start only the server
 - `bun check-types`: Check TypeScript types across all apps
+- `bun db:generate`: Generate Prisma client
 - `bun db:push`: Push schema changes to database
 - `bun db:studio`: Open database studio UI
 - `bun check`: Run Biome formatting and linting
+
+## Docker Commands
+
+- `docker-compose build`: Build all Docker images
+- `docker-compose up`: Start all services (web, server, database)
+- `docker-compose up -d`: Start all services in detached mode
+- `docker-compose down`: Stop all services
+- `docker-compose down -v`: Stop all services and remove volumes
+- `docker-compose logs -f`: Follow logs from all services
+- `docker-compose logs -f server`: Follow logs from the server service
+- `docker-compose logs -f web`: Follow logs from the web service
